@@ -5,8 +5,15 @@ scheduler. This is an instruction template, not an installed automation.
 
 ```text
 Operate the Instagram publication workflow for [authorized account] using the
-repository at [local repository path]. Read docs/OPERATIONS.md and local
-config.json, then run python3 agent.py tick in that directory.
+repository at [local repository path]. Read docs/OPERATIONS.md,
+docs/LOOP_ENGINEERING.md, and local config.json. Treat this run as one bounded
+loop iteration: observe, decide, claim, act, verify, persist, then wait for the
+next trigger. Inspect python3 agent.py status and run python3 agent.py tick.
+
+Inspect unresolved PUBLISHING and VERIFY_REQUIRED records across dates before
+new submissions. The CLI's current-date checks alone do not reconcile older
+uncertain outcomes. Current browser observations and durable records must guide
+recovery; conversation memory is not sufficient evidence.
 
 Respect the configured timezone, current local date, pause control, and one-post
 daily limit. When formal brand content is not ready, retain the current state and
@@ -26,6 +33,8 @@ create paid services, send private messages, or reply to comments unless separat
 authorized. Keep unchanged pending states quiet; report a real publication,
 failure, material recovery, or action needed from the owner.
 
-Record actual run and publication times. Distinguish schedule registration,
-actual scheduler invocation, local workflow execution, and real publication.
+Record planned time, actual run time, decision, job ID, resulting state, and any
+real publication/evidence reference locally for the next iteration. Distinguish
+schedule registration, actual invocation, local execution, and verified publication.
+Do not present the local claim mechanism as an end-to-end exactly-once guarantee.
 ```

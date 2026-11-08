@@ -1,14 +1,68 @@
 # Instagram Publishing Agent
 
-A local publication queue and operating protocol for a browser-capable agent.
-It keeps track of what should be published, prevents duplicate submissions,
-rechecks pause and content state before publishing, and records verified results.
+[English](README.md) · [简体中文](README.zh-CN.md)
+
+**Loop engineering for a stateful, verifiable Instagram publishing workflow.**
+
+A local publication queue and operating protocol for a browser-capable agent,
+organized around a persistent feedback loop:
+
+**Observe → Decide → Claim → Act → Verify → Persist → Repeat.**
+
+Each iteration reads durable state, makes a bounded decision, and records what
+actually happened. The next iteration uses those records to determine whether
+to publish, wait, stop, or reconcile an uncertain result.
 
 **The Python program does not log in to Instagram, control a browser, generate
 AI content, or run a scheduler by itself.** An authorized agent with browser tools
 performs those steps using [the operating protocol](docs/OPERATIONS.md).
 The original prototype used Codex Computer Use and a local scheduled chat.
 No API keys or browser sessions are included in this repository.
+
+## Loop engineering
+
+In this repository, **loop engineering** means designing the control flow, state,
+checks, feedback, and recovery rules around every agent action. A scheduled wake-up
+starts one iteration; it does not by itself establish success.
+
+```mermaid
+flowchart TD
+    T[External scheduler] --> O[Observe config, ledger, and current UI]
+    O --> D{Choose a bounded next step}
+    D -->|Paused or content pending| W[Wait and retain state]
+    D -->|Uncertain previous submission| R[Reconcile actual posts]
+    D -->|Eligible due job| C[Persist transactional claim]
+    C --> G[Recheck final publication gate]
+    G --> A[Submit Share once]
+    A --> V[Observe result and reopen the actual post]
+    V --> P[Persist verified evidence or uncertainty]
+    R --> P
+    W --> N[Next scheduled iteration]
+    P --> N
+    N --> O
+```
+
+| Loop stage | Implementation | Required outcome |
+| --- | --- | --- |
+| Observe | Local configuration, SQLite ledger, fresh browser state | Establish current facts before choosing an action. |
+| Decide | `tick` and the surrounding agent | Produce a due job, a waiting state, or a reconciliation decision. |
+| Claim | `claim`, inside a SQLite transaction | Persist the successful claim and publishing intent before submission. |
+| Act | Authorized browser agent, after `check` | Submit the intended post once within the configured scope. |
+| Verify | Platform result plus actual post readback | Check author, media, caption, and permalink. |
+| Persist | `record` or `uncertain` | Make verified success or uncertainty available to the next run. |
+| Repeat | External scheduler and persistent local files | Resume from durable evidence and current conditions. |
+
+A useful iteration may publish nothing: paused work, missing brand content, or an
+unknown submission result are explicit states. They must not cause filler posts
+or blind retries.
+
+The ledger and Instagram are separate systems. Transactional claims reduce
+duplicate attempts, but **exactly-once publication is not guaranteed**. Evidence
+flags are operator attestations; platform readback is the surrounding agent's
+responsibility. Older unresolved jobs also require inspection across date changes.
+
+Read [the loop engineering design](docs/LOOP_ENGINEERING.md) for the persisted
+state machine, failure scenarios, recovery rules, and implementation boundaries.
 
 ## What is included
 

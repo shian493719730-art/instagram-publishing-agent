@@ -2,11 +2,14 @@
 
 Use only an account and publishing scope authorized by the account owner.
 Read the local configuration and use current browser-tool documentation.
+The [loop engineering design](LOOP_ENGINEERING.md) explains how these steps
+connect durable state, bounded actions, external feedback, and the next iteration.
 
 1. Run `python3 agent.py tick` from the repository directory.
 2. If paused, waiting for brand material, or lacking eligible content, stop without
    creating filler posts. Report only a meaningful change or required user action.
-3. If an existing submission is uncertain, inspect actual posts and reconcile it.
+3. Inspect ledger status across dates. If an existing submission is uncertain,
+   inspect actual posts and reconcile it.
    Do not submit another copy while the outcome is unknown.
 4. For a due job, run `python3 agent.py claim POST_ID` and use its saved payload.
 5. Verify the actual signed-in Instagram account. Never assume that a profile
