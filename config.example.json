@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "account": "your_brand_account",
+  "brand": "Your Brand",
+  "timezone": "UTC",
+  "publishing_enabled": false,
+  "production_content_ready": false,
+  "default_language": "en",
+  "daily_limit": 1,
+  "daily_local_time": "11:00",
+  "executor": "An authorized browser-capable agent; no browser executor is bundled",
+  "content_policy": "Publish reviewed brand content only. Verify factual claims and asset rights. Reconcile uncertain outcomes before any retry."
+}

@@ -1,0 +1,12 @@
+{
+  "ready": false,
+  "account": "your_brand_account",
+  "kind": "production",
+  "slot": "daily",
+  "scheduled_at": "2099-01-15T11:00:00+00:00",
+  "assets": ["../media/example.png"],
+  "caption": "Replace this with reviewed copy for your brand.",
+  "alt_text": "A cream demonstration card with a simple plate illustration. Replace this description when using actual brand assets.",
+  "sources": [],
+  "editorial_note": "Set a real timezone-aware publishing time, replace the account and content, and explicitly mark ready=true after review. This example is not eligible for publication."
+}

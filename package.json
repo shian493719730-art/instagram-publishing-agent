@@ -1,0 +1,15 @@
+{
+  "name": "instagram-publishing-agent",
+  "private": true,
+  "version": "0.1.0",
+  "license": "UNLICENSED",
+  "description": "Evidence-based Instagram publication queue and browser-agent operating protocol",
+  "scripts": {
+    "render-example": "node render-example.cjs",
+    "test": "python3 -m unittest -v test_agent.py",
+    "demo": "python3 tools/demo.py"
+  },
+  "dependencies": {
+    "@resvg/resvg-js": "2.6.2"
+  }
+}
